@@ -5,6 +5,8 @@ export default function JobSection({
   title,
   jobs,
   onDelete,
+  onCancel,
+  onRetry,
   showDuration,
   action,
   emptyHint,
@@ -12,6 +14,8 @@ export default function JobSection({
   title: string;
   jobs: Job[];
   onDelete: (id: string) => void;
+  onCancel?: (id: string) => void;
+  onRetry?: (id: string) => void;
   showDuration: boolean;
   action?: React.ReactNode;
   emptyHint?: string;
@@ -33,7 +37,14 @@ export default function JobSection({
       ) : (
         <div className="job-rows">
           {jobs.map((j) => (
-            <JobRow key={j.id} job={j} onDelete={onDelete} showDuration={showDuration} />
+            <JobRow
+              key={j.id}
+              job={j}
+              onDelete={onDelete}
+              onCancel={onCancel}
+              onRetry={onRetry}
+              showDuration={showDuration}
+            />
           ))}
         </div>
       )}

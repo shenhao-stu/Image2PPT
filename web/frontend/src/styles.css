@@ -1,57 +1,127 @@
-/* DeckWeaver — refined developer-tool aesthetic.
-   Tokens on :root; [data-theme="dark"] swaps them. */
+/* DeckWeaver — warm-dark editorial × developer-tool aesthetic.
+   Inspired by getoken.tech (warm black + rose accent), but with
+   Instrument Serif for editorial wordmarks and a soft dot-grid
+   atmosphere. Single theme (dark); the light-theme :root block
+   was removed because the deployment is configured to always
+   apply data-theme="dark". */
 
-:root {
-  /* light + beige (default) */
-  --bg:            #faf5e8;
+:root[data-theme="light"] {
+  /* Companion light theme. Same warm-rose accent so the brand feels
+     continuous when the user toggles. */
+  --bg:            #faf7f5;
   --panel:         #ffffff;
-  --panel-2:       #f3ead4;
-  --panel-3:       #ebe0c0;
-  --border:        #e3d8bb;
-  --border-strong: #c8b993;
-  --text:          #1f1a10;
-  --text-2:        #4a4231;
-  --muted:         #8a7e61;
-  --faint:         #b4a784;
+  --panel-2:       #f6efe8;
+  --panel-3:       #ede2d8;
+  --border:        #e5d6cc;
+  --border-strong: #c8b5a8;
+  --text:          #1b1418;
+  --text-2:        #45343b;
+  --muted:         #8a7a72;
+  --faint:         #b8a89f;
 
-  --accent:        oklch(0.62 0.12 70);
-  --accent-2:      oklch(0.52 0.12 70);
-  --accent-fg:     #faf5e8;
-  --accent-soft:   oklch(0.62 0.12 70 / 0.14);
-  --accent-ring:   oklch(0.62 0.12 70 / 0.30);
+  --accent:        oklch(0.62 0.18 22);
+  --accent-2:      oklch(0.52 0.18 22);
+  --accent-fg:     #fff5f6;
+  --accent-soft:   oklch(0.62 0.18 22 / 0.14);
+  --accent-ring:   oklch(0.62 0.18 22 / 0.30);
 
-  --good:          oklch(0.56 0.13 150);
-  --good-soft:     oklch(0.56 0.13 150 / 0.14);
-  --warn:          oklch(0.66 0.15 65);
-  --warn-soft:     oklch(0.66 0.15 65 / 0.14);
-  --bad:           oklch(0.55 0.18 25);
-  --bad-soft:      oklch(0.55 0.18 25 / 0.12);
+  --good:          oklch(0.58 0.15 150);
+  --good-soft:     oklch(0.58 0.15 150 / 0.14);
+  --warn:          oklch(0.65 0.15 75);
+  --warn-soft:     oklch(0.65 0.15 75 / 0.14);
+  --bad:           oklch(0.55 0.20 28);
+  --bad-soft:      oklch(0.55 0.20 28 / 0.12);
 
-  --radius:        10px;
-  --radius-sm:     6px;
-  --radius-lg:     14px;
-  --shadow-card:   0 1px 0 rgb(255 255 255 / 0.6) inset, 0 6px 24px -18px rgb(60 45 20 / 0.18);
-
-  --row-pad-y:     14px;
-  --section-gap:   18px;
-  --card-pad:      28px;
-
-  --sidebar-w:     280px;
+  --shadow-card:   0 1px 0 rgb(255 255 255 / 0.7) inset,
+                   0 12px 28px -20px rgb(60 30 25 / 0.16);
 }
 
+:root,
 :root[data-theme="dark"] {
-  --bg:            #0a0a0d;
-  --panel:         #111116;
-  --panel-2:       #16161d;
-  --panel-3:       #1c1c25;
-  --border:        #22222c;
-  --border-strong: #2d2d3a;
-  --text:          #ececf1;
-  --text-2:        #b8b8c4;
-  --muted:         #7a7a8c;
-  --faint:         #4a4a5a;
-  --accent-fg:     #0a0a0d;
-  --shadow-card:   0 1px 0 rgb(255 255 255 / 0.02) inset, 0 12px 30px -18px rgb(0 0 0 / 0.6);
+  /* Warm-dark surfaces (≈ getoken.tech palette).
+     bg has a faint red undertone, sets the "studio at night" mood. */
+  --bg:            #0c0709;
+  --panel:         #100b0d;   /* getoken's --card */
+  --panel-2:       #16100f;
+  --panel-3:       #1d1517;
+  --border:        #2a1d22;
+  --border-strong: #3a2731;
+  --text:          #f5f7f6;
+  --text-2:        #dbdcd9;
+  --muted:         #a39d9b;
+  --faint:         #6a6664;
+
+  /* Accent: rose 400 → 500 gradient. Distinctive vs the generic
+     blue you see on every other dev tool. */
+  --accent:        oklch(0.74 0.16 18);   /* ≈ #fb7185 rose-400 */
+  --accent-2:      oklch(0.62 0.18 22);   /* ≈ #e11d48 rose-600 */
+  --accent-fg:     #110608;
+  --accent-soft:   oklch(0.74 0.16 18 / 0.14);
+  --accent-ring:   oklch(0.74 0.16 18 / 0.34);
+
+  /* Status pills */
+  --good:          oklch(0.74 0.16 150);
+  --good-soft:     oklch(0.74 0.16 150 / 0.14);
+  --warn:          oklch(0.80 0.16 75);
+  --warn-soft:     oklch(0.80 0.16 75 / 0.14);
+  --bad:           oklch(0.66 0.22 28);
+  --bad-soft:      oklch(0.66 0.22 28 / 0.14);
+
+  --radius:        12px;
+  --radius-sm:     8px;
+  --radius-lg:     16px;
+  --shadow-card:   0 0 0 1px rgb(255 255 255 / 0.02) inset,
+                   0 18px 50px -28px rgb(0 0 0 / 0.85);
+
+  --row-pad-y:     14px;
+  --section-gap:   20px;
+  --card-pad:      28px;
+
+  --sidebar-w:     268px;
+
+  /* Type families — Inter for body+display (matches getoken.tech).
+     JetBrains Mono for code, IDs and numeric badges. */
+  --font-sans:     "Inter", ui-sans-serif, system-ui, -apple-system,
+                   "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+                   "Noto Sans SC", "Microsoft YaHei",
+                   "WenQuanYi Micro Hei", sans-serif;
+  --font-display:  var(--font-sans);
+  --font-mono:     "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono",
+                   Menlo, Consolas, monospace;
+}
+
+/* ---------- Accent palettes ----------
+   data-accent on <html> swaps four tokens. Default (rose) is also the
+   :root fallback above so no-attribute renders the same as accent=rose. */
+:root[data-accent="rose"]    {
+  --accent: oklch(0.74 0.16 18);
+  --accent-2: oklch(0.62 0.18 22);
+  --accent-soft: oklch(0.74 0.16 18 / 0.14);
+  --accent-ring: oklch(0.74 0.16 18 / 0.34);
+}
+:root[data-accent="blue"]    {
+  --accent: oklch(0.66 0.18 252);
+  --accent-2: oklch(0.55 0.19 252);
+  --accent-soft: oklch(0.66 0.18 252 / 0.16);
+  --accent-ring: oklch(0.66 0.18 252 / 0.34);
+}
+:root[data-accent="amber"]   {
+  --accent: oklch(0.78 0.16 72);
+  --accent-2: oklch(0.66 0.18 60);
+  --accent-soft: oklch(0.78 0.16 72 / 0.16);
+  --accent-ring: oklch(0.78 0.16 72 / 0.34);
+}
+:root[data-accent="violet"]  {
+  --accent: oklch(0.65 0.20 295);
+  --accent-2: oklch(0.55 0.22 295);
+  --accent-soft: oklch(0.65 0.20 295 / 0.16);
+  --accent-ring: oklch(0.65 0.20 295 / 0.34);
+}
+:root[data-accent="emerald"] {
+  --accent: oklch(0.72 0.16 165);
+  --accent-2: oklch(0.60 0.16 165);
+  --accent-soft: oklch(0.72 0.16 165 / 0.16);
+  --accent-ring: oklch(0.72 0.16 165 / 0.34);
 }
 
 :root[data-density="compact"] {
@@ -65,16 +135,274 @@ html, body, #root { margin: 0; height: 100%; }
 body {
   background: var(--bg);
   color: var(--text);
-  font: 14px/1.55 "Geist", -apple-system, BlinkMacSystemFont, "PingFang SC",
-        "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  font-feature-settings: "ss01", "cv11";
+  font: 14px/1.55 var(--font-sans);
+  font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-.mono {
-  font-family: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-feature-settings: "ss01", "cv01";
+/* ---------- Atmospheric background (subtle dot grid + warm vignette) ---------- */
+.bg-grid {
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+  mask-image: radial-gradient(circle at 30% 0%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle at 30% 0%, #000 0%, transparent 70%);
+}
+.bg-glow {
+  position: fixed; top: -28vh; right: -28vw;
+  width: 80vw; height: 70vh;
+  z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(closest-side,
+      color-mix(in oklch, var(--accent) 22%, transparent),
+      color-mix(in oklch, var(--accent-2) 10%, transparent) 60%,
+      transparent 80%);
+  filter: blur(8px);
+  transition: background 360ms ease;
+}
+
+/* Push the app shell above the bg layers */
+#root { position: relative; z-index: 1; }
+
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* Headings: tight tracking, Inter 600/700. The brand wordmark uses
+   `.brand-name` / `.login-wordmark` for finer-grained control. */
+h1, h2, h3 { color: var(--text); margin: 0; }
+h1 { font-weight: 700; letter-spacing: -0.022em; }
+h2 { font-weight: 600; letter-spacing: -0.014em; }
+h3 { font-weight: 600; letter-spacing: -0.008em; }
+
+/* Wordmark: lowercase Inter 700, tightened, with a colored period.
+   Used in the sidebar brand area and on the login screen. */
+.brand-name {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-feature-settings: "ss01";
+}
+.brand-dot {
+  color: var(--accent);
+  margin-left: 1px;
+  font-weight: 800;
+}
+
+/* ---------- Accent picker (chip + popover) ---------- */
+.accent-picker { position: relative; display: inline-flex; }
+.accent-btn { padding: 0; width: 30px; height: 30px; }
+.accent-swatch {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1.5px var(--bg) inset,
+              0 0 0 2px color-mix(in oklch, currentColor 20%, transparent);
+}
+.accent-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 30;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 140px;
+  box-shadow: 0 18px 50px -28px rgb(0 0 0 / 0.65);
+}
+.accent-pop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  font: 13px/1.2 var(--font-sans);
+}
+.accent-pop-item:hover { background: var(--panel-2); }
+.accent-pop-item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.accent-pop-label { flex: 1; }
+
+
+/* ---------- TopBar ---------- */
+.topbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  background: color-mix(in oklch, var(--panel) 80%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+.topbar .btn.icon {
+  width: 30px; height: 30px;
+  border: none; background: transparent;
+  border-radius: 999px;
+  color: var(--muted);
+  padding: 0;
+}
+.topbar .btn.icon:hover { background: var(--panel-2); color: var(--text); }
+.topbar-lang {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Login redesign ---------- */
+.login-wrap {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+.login-topbar {
+  position: absolute;
+  top: 20px; right: 24px;
+  z-index: 2;
+}
+.login-card-wrap {
+  width: 100%;
+  max-width: 460px;
+}
+.login-card {
+  background: color-mix(in oklch, var(--panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(10px);
+}
+.login-brand-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+.login-wordmark {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 44px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 0;
+  color: var(--text);
+  display: inline-flex;
+  align-items: baseline;
+}
+.login-wordmark .brand-dot {
+  font-weight: 800;
+  margin-left: 2px;
+  /* Slightly larger relative to wordmark size for a crisp punctuation tick. */
+  font-size: 0.9em;
+}
+.login-sub {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 2px;
+  letter-spacing: -0.01em;
+}
+.login-card .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.login-card .field > span {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.login-pow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--panel-2);
+  font-size: 12.5px;
+  color: var(--muted);
+  transition: border-color 200ms, background 200ms;
+}
+.login-pow svg { color: var(--muted); flex: none; }
+.login-pow-body { display: flex; flex-direction: column; }
+.login-pow-title { font-weight: 500; color: var(--text-2); font-size: 12px; }
+.login-pow-status { font-family: var(--font-mono); font-size: 11.5px; margin-top: 2px; }
+.login-pow.login-pow-ready {
+  border-color: color-mix(in oklch, var(--good) 50%, var(--border));
+  background: var(--good-soft);
+}
+.login-pow.login-pow-ready svg,
+.login-pow.login-pow-ready .login-pow-status { color: var(--good); }
+.login-pow.login-pow-error {
+  border-color: color-mix(in oklch, var(--bad) 50%, var(--border));
+  background: var(--bad-soft);
+}
+.login-pow.login-pow-error svg,
+.login-pow.login-pow-error .login-pow-status { color: var(--bad); }
+.login-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  font-size: 14px;
+}
+.login-repo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  background: var(--panel-2);
+  transition: border-color 120ms;
+}
+.login-repo:hover { border-color: var(--border-strong); }
+.login-repo .info { flex: 1; min-width: 0; }
+.login-repo-name { font-family: var(--font-mono); font-size: 12.5px; font-weight: 500; }
+.login-repo-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.login-repo-arrow { color: var(--muted); }
+.login-card .foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--faint);
+}
+.login-card .err {
+  color: var(--bad);
+  font-size: 12px;
+  padding: 8px 10px;
+  background: var(--bad-soft);
+  border: 1px solid color-mix(in oklch, var(--bad) 40%, var(--border));
+  border-radius: var(--radius-sm);
 }
 
 /* ---------- Buttons ---------- */
@@ -106,19 +434,19 @@ body {
 
 /* ---------- Inputs ---------- */
 .input {
-  background: var(--panel-2);
+  background: var(--panel);
   color: var(--text);
   border: 1px solid var(--border);
-  padding: 9px 12px;
+  padding: 10px 12px;
   border-radius: var(--radius-sm);
-  font: inherit;
-  font-family: inherit;
+  font: 14px/1.4 var(--font-sans);
   width: 100%;
   outline: none;
   transition: border-color 120ms, box-shadow 120ms;
 }
+.input:hover { border-color: var(--border-strong); }
 .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
-.input::placeholder { color: var(--faint); }
+.input::placeholder { color: var(--faint); letter-spacing: 0.04em; }
 
 /* ---------- App shell ---------- */
 .app { min-height: 100vh; display: grid; grid-template-columns: var(--sidebar-w) 1fr; }
@@ -600,7 +928,13 @@ body {
 .status.failed .sdot { background: var(--bad); }
 .status.canceled { color: var(--muted); }
 
-/* Progress */
+/* Progress — honest rendering only.
+   The bar width reflects whatever the server last reported. No
+   shimmer animation that pretends activity is happening during long
+   stages, and no slow width interpolation that smooths real jumps
+   into a fake "always moving" feel. The transition is short enough
+   to avoid jank when WS pushes a new value, but not so long that it
+   masks the underlying step. */
 .progress {
   position: relative;
   height: 5px; border-radius: 999px; overflow: hidden;
@@ -609,22 +943,11 @@ body {
 .progress > .bar {
   height: 100%; border-radius: 999px;
   background: var(--accent);
-  transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-.progress.running > .bar::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(90deg,
-    transparent 30%,
-    color-mix(in oklch, white 40%, transparent) 50%,
-    transparent 70%);
-  animation: shimmer 1.8s linear infinite;
-}
-@keyframes shimmer {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  transition: width 120ms linear;
 }
 .progress.done > .bar { background: var(--good); }
 .progress.failed > .bar { background: var(--bad); }
+.progress.canceled > .bar { background: var(--muted); }
 .prog-cell .info {
   display: flex; justify-content: space-between;
   margin-top: 5px;

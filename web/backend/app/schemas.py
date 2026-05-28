@@ -10,6 +10,10 @@ from pydantic import BaseModel, ConfigDict
 class LoginIn(BaseModel):
     username: str
     password: str
+    # Optional PoW fields — required only when DECKWEAVER_POW_REQUIRED=true.
+    # The client first GETs /api/auth/pow to obtain the challenge string.
+    pow_challenge: str | None = None
+    pow_nonce: str | None = None
 
 
 class TokenOut(BaseModel):
@@ -68,3 +72,18 @@ class UserCreate(BaseModel):
     username: str
     password: str
     is_admin: bool = False
+
+
+class BulkDeleteIn(BaseModel):
+    """Body for POST /api/jobs/bulk-delete."""
+    ids: list[str]
+    # When true, running jobs are SIGTERMed first and then deleted in
+    # the same call (so the user doesn't have to cancel+delete twice).
+    force: bool = False
+
+
+class BulkDeleteOut(BaseModel):
+    """Result of POST /api/jobs/bulk-delete."""
+    deleted: list[str]
+    skipped: list[dict]  # [{id, reason}]
+    storage_freed_mb: int = 0

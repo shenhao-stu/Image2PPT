@@ -10,10 +10,18 @@ from ..models import User
 from ..ratelimit import RateLimiter
 from ..schemas import LoginIn, TokenOut, UserOut, UserCreate
 from ..security import hash_password, issue_token, verify_password
+from .. import pow_challenge
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 _login_limiter = RateLimiter(get_settings().login_rate_per_min)
+
+
+@router.get("/pow")
+def pow_issue() -> dict:
+    """Issue a fresh PoW challenge. The client must solve it before
+    /api/auth/login will be accepted."""
+    return pow_challenge.issue()
 
 
 def _client_ip(request: Request) -> str:
@@ -39,6 +47,14 @@ def login(
             f"Too many login attempts, retry in {retry}s",
             headers={"Retry-After": str(retry)},
         )
+    # PoW gate (skipped only if explicitly disabled via env). We verify
+    # BEFORE the password compare so attackers can't burn bcrypt cycles
+    # for free.
+    import os as _os
+    if _os.environ.get("DECKWEAVER_POW_REQUIRED", "true").lower() not in ("0", "false", "no"):
+        ok, reason = pow_challenge.verify(payload.pow_challenge or "", payload.pow_nonce or "")
+        if not ok:
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, f"pow:{reason}")
     user = db.query(User).filter(User.username == payload.username).one_or_none()
     if not user or not verify_password(payload.password, user.password_hash):
         # Constant-time-ish: bcrypt verify already burns the cycles even

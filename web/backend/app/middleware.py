@@ -17,8 +17,11 @@ SECURE_HEADERS = {
     # you can prove it isn't necessary in your bundle.
     "Content-Security-Policy": (
         "default-src 'self'; "
+        # Allow inline data: images plus the Google Fonts stylesheet host
+        # for fonts.googleapis.com / fonts.gstatic.com.
         "img-src 'self' data: blob:; "
-        "style-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' data: https://fonts.gstatic.com; "
         "script-src 'self'; "
         "connect-src 'self' ws: wss:; "
         "frame-ancestors 'none'; "

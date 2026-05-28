@@ -1,0 +1,30 @@
+[Unit]
+Description=DeckWeaver Web (Image2PPT fork, VLM profile)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/deckweaver
+# web/.env is auto-loaded by pydantic-settings; .env.vlm provides VLM creds to
+# the convert_vlm.py subprocess (and to the parent for sanity).
+EnvironmentFile=/opt/deckweaver/web/.env
+EnvironmentFile=/opt/deckweaver/web/.env.vlm
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/deckweaver/.venv/bin/uvicorn web.backend.app.main:app --host 127.0.0.1 --port 8765 --workers 1
+Restart=always
+RestartSec=5
+
+MemoryMax=260M
+MemoryHigh=210M
+
+StartLimitIntervalSec=120
+StartLimitBurst=10
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=deckweaver-web
+
+[Install]
+WantedBy=multi-user.target

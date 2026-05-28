@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
 from ..config import get_settings
-from .. import github_sync, runtime_settings, sandbox
+from .. import github_sync, queue as job_queue, runtime_settings, sandbox
 from ..db import SessionLocal
 from ..deps import get_current_user, require_admin
 from ..models import User
@@ -55,6 +55,15 @@ async def trigger_update(_: User = Depends(require_admin)):
     import asyncio
     asyncio.create_task(github_sync._try_update())
     return {"started": True}
+
+
+@router.post("/sweep-orphans")
+def sweep_orphans(_: User = Depends(require_admin)):
+    """Admin: trigger one orphan-dir sweep immediately. Useful after
+    incidents that may have left disk and DB out of sync (manual DB
+    edits, crashed delete flows). Returns the number of dirs removed."""
+    swept = job_queue.sweep_orphan_dirs()
+    return {"swept": swept}
 
 
 ws_router = APIRouter()

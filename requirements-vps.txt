@@ -1,0 +1,6 @@
+# VPS profile — VLM-driven, no local OCR/CV models.
+# Used in lieu of requirements.txt when DECKWEAVER_USE_VLM=true.
+python-pptx
+pillow
+pymupdf
+httpx

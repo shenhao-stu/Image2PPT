@@ -52,7 +52,7 @@ class Settings(BaseSettings):
     update_poll_seconds: int = 600
     git_remote: str = "origin"
     git_branch: str = "main"
-    github_repo_url: str = "https://github.com/GuopengLin/Image2PPT"
+    github_repo_url: str = "https://github.com/shenhao-stu/Image2PPT"
 
     # CORS (frontend dev server)
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"

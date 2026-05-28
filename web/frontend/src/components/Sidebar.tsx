@@ -1,6 +1,5 @@
 import type { Job, Me, VersionInfo } from "../api/client";
 import { Icon } from "./icons";
-import logoUrl from "../assets/logo.png";
 
 export type Page = "new" | "active" | "history" | "system";
 
@@ -52,7 +51,7 @@ export default function Sidebar({
     : [];
 
   const repoName =
-    version?.remote_url.replace(/^https?:\/\/(www\.)?github\.com\//, "") || "GuopengLin/Image2PPT";
+    version?.remote_url.replace(/^https?:\/\/(www\.)?github\.com\//, "") || "shenhao-stu/Image2PPT";
   const repoStatusClass = version?.updating ? "updating" : (version?.behind ?? 0) > 0 ? "behind" : "up";
   const repoStatusText = version?.updating
     ? "更新中"
@@ -62,10 +61,9 @@ export default function Sidebar({
 
   return (
     <aside className="sidebar">
-      <div className="brand">
-        <img className="brand-logo" src={logoUrl} alt="DeckWeaver" />
-        <span className="brand-name">DeckWeaver</span>
-      </div>
+      <a className="brand" href="/" onClick={(e) => { e.preventDefault(); }}>
+        <span className="brand-name">recta<span className="brand-dot">.</span></span>
+      </a>
 
       <div className="nav-group">工作区</div>
       {items.map((it) => (

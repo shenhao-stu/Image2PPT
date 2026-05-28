@@ -43,3 +43,9 @@ web/.env
 web/backend/.venv/
 web/frontend/node_modules/
 web/frontend/dist/
+
+# --- iter v2 additions ---
+web/frontend/tsconfig.tsbuildinfo
+.venv/
+deploy/.env
+*.env.vlm

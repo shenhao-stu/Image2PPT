@@ -13,10 +13,14 @@ function FileGlyph({ kind }: { kind: "pdf" | "img" | "zip" }) {
 export default function JobRow({
   job,
   onDelete,
+  onCancel,
+  onRetry,
   showDuration,
 }: {
   job: Job;
   onDelete: (id: string) => void;
+  onCancel?: (id: string) => void;
+  onRetry?: (id: string) => void;
   showDuration: boolean;
 }) {
   const kind = kindFromSource(job.source_kind);
@@ -97,9 +101,29 @@ export default function JobRow({
             </button>
           </a>
         )}
+        {(job.status === "failed" || job.status === "canceled") && onRetry && (
+          <button
+            className="btn sm"
+            onClick={() => onRetry(job.id)}
+            title="使用原文件重新转换"
+          >
+            <Icon.Refresh /> 重试
+          </button>
+        )}
+        {(job.status === "running" || job.status === "queued") && onCancel && (
+          <button
+            className="btn sm ghost danger"
+            onClick={() => {
+              if (confirm(`确定中断「${job.source_filename}」吗？`)) onCancel(job.id);
+            }}
+            title="中断任务"
+          >
+            <Icon.Stop /> 中断
+          </button>
+        )}
         <button
           className="btn icon ghost danger"
-          disabled={job.status === "running"}
+          disabled={job.status === "running" || job.status === "queued"}
           onClick={() => {
             if (confirm(`确定删除「${job.source_filename}」吗？`)) onDelete(job.id);
           }}

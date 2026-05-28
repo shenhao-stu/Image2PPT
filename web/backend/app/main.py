@@ -130,6 +130,18 @@ def create_app() -> FastAPI:
     if dist.is_dir():
         app.mount("/assets", StaticFiles(directory=dist / "assets"), name="assets")
 
+        # Top-level static files Vite copies from /public/ at build time
+        # (e.g. favicon.png, robots.txt). Each one needs an explicit
+        # route — the SPA catchall below would otherwise mask them with
+        # index.html.
+        for _name in ("favicon.png", "favicon.ico", "robots.txt"):
+            _file = dist / _name
+            if _file.is_file():
+                def _make_handler(p):
+                    return lambda: FileResponse(p)
+                app.add_api_route(f"/{_name}", _make_handler(_file),
+                                  methods=["GET"], include_in_schema=False)
+
         @app.get("/")
         @app.get("/{path:path}")
         def spa_index(path: str = ""):

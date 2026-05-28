@@ -10,6 +10,7 @@ restart starts from a clean state.
 from __future__ import annotations
 
 import asyncio
+import logging
 import shutil
 import time
 from datetime import datetime, timezone
@@ -22,9 +23,41 @@ from .models import Job
 from .runner import run_convert
 from .ws import broker
 
+log = logging.getLogger("deckweaver.queue")
+
 
 _paused = False
 _queue: asyncio.Queue[str] = asyncio.Queue()
+
+
+class _CancelSet:
+    """Small thread-safe-ish flag set for jobs the user asked to cancel.
+    Cleared by the queue when it observes the cancel during teardown.
+    """
+    def __init__(self) -> None:
+        self._s: set[str] = set()
+
+    def add(self, jid: str) -> None:
+        self._s.add(jid)
+
+    def discard_if_present(self, jid: str) -> bool:
+        if jid in self._s:
+            self._s.discard(jid)
+            return True
+        return False
+
+    def __contains__(self, jid: str) -> bool:
+        return jid in self._s
+
+
+_cancelled = _CancelSet()
+
+
+def mark_cancelled(job_id: str) -> None:
+    """Called by the HTTP cancel route. The queue picks this flag up
+    when run_convert returns, so the status becomes 'canceled' rather
+    than 'failed'."""
+    _cancelled.add(job_id)
 
 
 def pause() -> None:
@@ -100,6 +133,7 @@ async def _process(job_id: str) -> None:
             )
 
         code, tail = await run_convert(
+            job_id=job.id,
             source=source,
             work_dir=Path(job.output_dir),
             upload_dir=Path(job.upload_dir),
@@ -113,7 +147,14 @@ async def _process(job_id: str) -> None:
         job.finished_at = datetime.now(timezone.utc)
         job.duration_seconds = max(int(time.monotonic() - wall_start), 1)
         pptx = Path(job.output_dir) / "slides.pptx"
-        if code == 0 and pptx.exists():
+        # Distinguish user cancel from real failure. SIGTERM via killpg
+        # delivers exit code 143 (SIGTERM) or -15; SIGKILL gives 137 or
+        # -9. The cancel route also flips an in-memory flag; check both.
+        cancelled = _cancelled.discard_if_present(job.id) or code in (-15, -9, 137, 143)
+        if cancelled:
+            job.status = "canceled"
+            job.error_msg = "cancelled by user"
+        elif code == 0 and pptx.exists():
             job.status = "done"
             job.progress_pct = 100
             job.current_page = job.page_count
@@ -178,7 +219,57 @@ def queue_size() -> int:
     return _queue.qsize()
 
 
-def cleanup_job_dirs(job: Job) -> None:
+def cleanup_job_dirs(job: Job) -> bool:
+    """Delete both the upload and output dirs for a job.
+
+    Returns True if the dirs are gone afterwards. Logs (not swallows)
+    real errors so we can spot leaks before they fill the disk; the old
+    `ignore_errors=True` masked busy files / perm denied as silent
+    orphans, which is exactly the disk leak this guards against.
+    """
+    ok = True
     for p in (Path(job.upload_dir), Path(job.output_dir)):
+        if not p.exists():
+            continue
+        try:
+            shutil.rmtree(p)
+        except OSError as exc:
+            log.warning("cleanup_job_dirs: rmtree(%s) failed: %s", p, exc)
+            ok = False
         if p.exists():
-            shutil.rmtree(p, ignore_errors=True)
+            log.warning("cleanup_job_dirs: %s still present after rmtree", p)
+            ok = False
+    return ok
+
+
+def sweep_orphan_dirs() -> int:
+    """Scan uploads/outputs for sub-dirs that don't correspond to any
+    DB row and delete them. Catches anything `cleanup_job_dirs` couldn't
+    finish (e.g. files were in use at delete-time and freed later) plus
+    stragglers from interrupted DELETE flows.
+
+    Returns the number of dirs removed.
+    """
+    s = get_settings()
+    db = SessionLocal()
+    try:
+        live_ids = {jid for (jid,) in db.query(Job.id).all()}
+    finally:
+        db.close()
+
+    removed = 0
+    for root in (s.uploads_dir, s.outputs_dir):
+        if not root.exists():
+            continue
+        for child in root.iterdir():
+            if not child.is_dir():
+                continue
+            if child.name in live_ids:
+                continue
+            try:
+                shutil.rmtree(child)
+                removed += 1
+                log.info("sweep_orphan_dirs: removed %s", child)
+            except OSError as exc:
+                log.warning("sweep_orphan_dirs: rmtree(%s) failed: %s", child, exc)
+    return removed

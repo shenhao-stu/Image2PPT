@@ -1,17 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DeckWeaver · 图片转 PPT</title>
+    <title>recta · 图片转 PPT</title>
+    <!-- No favicon. The "matrix+dot" PNG looked like AI-generated slop;
+         data: with empty content suppresses the default globe so the
+         tab stays clean. -->
+    <link rel="icon" href="data:," />
+    <meta
+      name="description"
+      content="Recta — 把幻灯片截图或 PDF 重建为可编辑 PowerPoint。VLM 驱动，几分钟出图。"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Inter (matches getoken.tech) + JetBrains Mono for code/IDs. -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
     />
   </head>
   <body>
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-glow" aria-hidden="true"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

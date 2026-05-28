@@ -57,6 +57,10 @@ _SAFE_ENV_KEYS = {
     "PYTHONUNBUFFERED", "PYTHONIOENCODING",
     "PYTHONPATH",                  # user-managed; we forward as-is
     "DECKWEAVER_DEVICE",           # GPU / CPU toggle for the CLI
+    # VLM credentials + tuning for the cloud-only profile (convert_vlm.py).
+    "DECKWEAVER_LLM_BASE", "DECKWEAVER_LLM_KEY",
+    "DECKWEAVER_LLM_MODEL", "DECKWEAVER_LLM_FALLBACK",
+    "DECKWEAVER_LLM_PARALLEL", "DECKWEAVER_MAX_LONG_EDGE",
     # Model cache locations. If unset, we don't add them; if set by the
     # operator, forward so the subprocess hits the same cache.
     "PADDLE_HOME", "PADDLE_PDX_CACHE_HOME",
